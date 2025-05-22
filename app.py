@@ -48,7 +48,7 @@ CORS(app)  # Enable CORS for API calls
 app.secret_key = os.getenv("SECRET_KEY", "study_q_app_secret_key_2025")
 
 # MongoDB setup
-mongo_uri = os.getenv('MONGO_URI', 'mongodb+srv://nakshathra:jain@cluster0.l6x4e.mongodb.net/')
+mongo_uri = os.getenv('MONGO_URI', 'your mongo uri')
 client = MongoClient(mongo_uri)
 db = client['hack']  # Database name
 users_collection = db['users']  # Collection for users
