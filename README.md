@@ -279,17 +279,23 @@ Supported File Formats: 4 (PDF, DOCX, PPTX, TXT)
 Learning Styles Supported: 4 (Visual, Auditory, Kinesthetic, Reading/Writing)
 
 👥 Our Team
-[Devvrat](https://github.com/devvsin)
-[Devasurya](https://github.com/Devasurya05)
-[Nakshathra](https://github.com/NAKSHATHRA305)
-[Neeha](https://github.com/Devasurya05)
-[Ninmisha](https://github.com/Devasurya05)
 This project was collaboratively developed by a dedicated team of 5 members, combining expertise in AI/ML, full-stack development, UI/UX design, and educational technology to create a comprehensive learning solution.
 
 
 <div align="center">
-  <p>Developed with ❤️ by our amazing team of 5 contributors</p>
-  <p><strong>Team Lead:</strong> <a href="https://github.com/devvsin">devvsin</a></p>
-  <p>⭐ Star this repository if you find our work helpful!</p>
+  <h3>👥 Our Amazing Team</h3>
+  <p>Developed with ❤️</p>
+  
+  <p><strong>Team Lead:</strong> <a href="https://github.com/devvsin">Devvrat</a></p>
+  <p><strong>Team Member:</strong> <a href="https://github.com/Devasurya05">Devasurya</a></p>
+  <p><strong>Team Member:</strong> <a href="https://github.com/NAKSHATHRA305">Nakshathra</a></p>
+  <p><strong>Team Member:</strong> <a href="https://github.com/devvsin">Neeha</a></p>
+  <p><strong>Team Member:</strong> <a href="https://github.com/devvsin">Ninmisha</a></p>
+  
+  <br/>
+  
+  <p>⭐ <strong>Star this repository if you find our work helpful!</strong> ⭐</p>
   <p><em>"Transforming education through AI-powered personalization"</em></p>
+  
+  <p><img src="https://img.shields.io/badge/Made%20with-❤️%20by%205%20amazing%20developers-red" alt="Made with Love"></p>
 </div>
