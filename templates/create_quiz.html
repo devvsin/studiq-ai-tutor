@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudiQ - Create Quiz</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            padding: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--color-text-dark);
+        }
+        
+        .quiz-form {
+            background-color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--color-text-dark);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(162, 89, 255, 0.15);
+        }
+        
+        .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            font-family: 'Poppins', sans-serif;
+            background-color: white;
+        }
+        
+        .form-select:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(162, 89, 255, 0.15);
+        }
+        
+        .questions-container {
+            margin-top: 2rem;
+        }
+        
+        .question-card {
+            background-color: var(--color-bg-main);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--color-border);
+            position: relative;
+        }
+        
+        .question-number {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            width: 30px;
+            height: 30px;
+            background-color: var(--color-primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .question-actions {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .action-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background-color: white;
+            border: 1px solid var(--color-border);
+        }
+        
+        .action-btn:hover {
+            background-color: var(--color-bg-sidebar);
+        }
+        
+        .delete-btn {
+            color: #ef4444;
+        }
+        
+        .delete-btn:hover {
+            background-color: #fee2e2;
+        }
+        
+        .options-container {
+            margin-top: 1rem;
+        }
+        
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .option-input {
+            flex: 1;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+        }
+        
+        .correct-checkbox {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--color-primary);
+        }
+        
+        .add-option-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: none;
+            border: none;
+            color: var(--color-primary);
+            font-size: 0.9rem;
+            cursor: pointer;
+            margin-top: 0.5rem;
+        }
+        
+        .add-option-btn:hover {
+            text-decoration: underline;
+        }
+        
+        .add-question-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--color-bg-main);
+            border: 2px dashed var(--color-border);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--color-text-medium);
+            transition: all 0.2s ease;
+            margin-bottom: 2rem;
+        }
+        
+        .add-question-btn:hover {
+            background-color: var(--color-bg-sidebar);
+            color: var(--color-primary);
+        }
+        
+        .form-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .cancel-btn {
+            padding: 0.75rem 1.5rem;
+            background-color: white;
+            color: var(--color-text-medium);
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .cancel-btn:hover {
+            background-color: var(--color-bg-main);
+        }
+        
+        .save-btn {
+            padding: 0.75rem 1.5rem;
+            background-color: var(--color-primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .save-btn:hover {
+            background-color: var(--color-primary-dark);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="left-header">
+                <button class="mobile-menu-btn" id="mobile-menu-btn">
+                    <i class="ri-menu-line"></i>
+                </button>
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="ri-flashlight-line"></i>
+                    </div>
+                    <a href="{{ url_for('home') }}" style="text-decoration: none; color: inherit;">
+                        <div class="logo-text">StudiQ</div>
+                    </a>
+                </div>
+                <nav>
+                    <a href="{{ url_for('home') }}">Home</a>
+                    <a href="{{ url_for('teacher_dashboard') }}">Teacher Dashboard</a>
+                </nav>
+            </div>
+            <div class="login-icon">
+                {% if session.user_name %}
+                <div class="user-menu">
+                    <span class="user-name">{{ session.user_name }}</span>
+                    <a href="{{ url_for('logout') }}" style="color: inherit; text-decoration: none;" title="Logout">
+                        <i class="ri-logout-box-line"></i>
+                    </a>
+                </div>
+                {% else %}
+                <a href="{{ url_for('loginpage') }}" style="color: inherit; text-decoration: none;" title="Login">
+                    <i class="ri-user-3-line"></i>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <div class="main-container">
+        <h1 class="page-title">Create New Quiz</h1>
+        
+        <form class="quiz-form" id="quiz-form">
+            <div class="form-group">
+                <label for="quiz-title" class="form-label">Quiz Title</label>
+                <input type="text" id="quiz-title" name="title" class="form-input" placeholder="Enter quiz title" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="quiz-description" class="form-label">Description</label>
+                <textarea id="quiz-description" name="description" class="form-input" rows="3" placeholder="Provide a brief description of the quiz"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="quiz-subject" class="form-label">Subject</label>
+                <input type="text" id="quiz-subject" name="subject" class="form-input" placeholder="Enter subject (e.g., Mathematics, Science)">
+            </div>
+            
+            <div class="form-group">
+                <label for="quiz-duration" class="form-label">Time Limit (minutes)</label>
+                <input type="number" id="quiz-duration" name="duration" class="form-input" min="1" value="10">
+            </div>
+            
+            <div class="form-group">
+                <label for="quiz-difficulty" class="form-label">Difficulty Level</label>
+                <select id="quiz-difficulty" name="difficulty" class="form-select">
+                    <option value="easy">Easy</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="hard">Hard</option>
+                </select>
+            </div>
+            
+            <div class="questions-container" id="questions-container">
+                <!-- Question template -->
+                <div class="question-card" data-question-id="1">
+                    <div class="question-number">1</div>
+                    <div class="question-actions">
+                        <div class="action-btn delete-btn">
+                            <i class="ri-delete-bin-line"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Question</label>
+                        <input type="text" name="question_text" class="form-input" placeholder="Enter your question">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Question Type</label>
+                        <select name="question_type" class="form-select question-type-select">
+                            <option value="multiple_choice">Multiple Choice</option>
+                            <option value="true_false">True/False</option>
+                            <option value="short_answer">Short Answer</option>
+                        </select>
+                    </div>
+                    
+                    <div class="options-container">
+                        <label class="form-label">Options</label>
+                        
+                        <div class="option-item">
+                            <input type="text" name="option_text" class="option-input" placeholder="Option 1">
+                            <input type="checkbox" name="is_correct" class="correct-checkbox" title="Mark as correct answer">
+                        </div>
+                        
+                        <div class="option-item">
+                            <input type="text" name="option_text" class="option-input" placeholder="Option 2">
+                            <input type="checkbox" name="is_correct" class="correct-checkbox" title="Mark as correct answer">
+                        </div>
+                        
+                        <button type="button" class="add-option-btn">
+                            <i class="ri-add-line"></i> Add Another Option
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="button" id="add-question-btn" class="add-question-btn">
+                <i class="ri-add-line"></i> Add New Question
+            </button>
+            
+            <div class="form-buttons">
+    <button type="button" class="cancel-btn" id="cancel-quiz-btn">Cancel</button>
+    <button type="submit" class="save-btn">Create Quiz</button>
+</div>
+        </form>
+    </div>
+    
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+    // Cancel button event listener
+    document.getElementById('cancel-quiz-btn').addEventListener('click', function() {
+        window.location.href = '{{ url_for("teacher_dashboard") }}';
+    });
+});
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const questionsContainer = document.getElementById('questions-container');
+            const addQuestionBtn = document.getElementById('add-question-btn');
+            const quizForm = document.getElementById('quiz-form');
+            let questionCount = 1;
+            
+            // Add new question
+            addQuestionBtn.addEventListener('click', function() {
+                questionCount++;
+                const newQuestion = document.createElement('div');
+                newQuestion.className = 'question-card';
+                newQuestion.setAttribute('data-question-id', questionCount);
+                
+                newQuestion.innerHTML = `
+                    <div class="question-number">${questionCount}</div>
+                    <div class="question-actions">
+                        <div class="action-btn delete-btn">
+                            <i class="ri-delete-bin-line"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Question</label>
+                        <input type="text" name="question_text" class="form-input" placeholder="Enter your question">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Question Type</label>
+                        <select name="question_type" class="form-select question-type-select">
+                            <option value="multiple_choice">Multiple Choice</option>
+                            <option value="true_false">True/False</option>
+                            <option value="short_answer">Short Answer</option>
+                        </select>
+                    </div>
+                    
+                    <div class="options-container">
+                        <label class="form-label">Options</label>
+                        
+                        <div class="option-item">
+                            <input type="text" name="option_text" class="option-input" placeholder="Option 1">
+                            <input type="checkbox" name="is_correct" class="correct-checkbox" title="Mark as correct answer">
+                        </div>
+                        
+                        <div class="option-item">
+                            <input type="text" name="option_text" class="option-input" placeholder="Option 2">
+                            <input type="checkbox" name="is_correct" class="correct-checkbox" title="Mark as correct answer">
+                        </div>
+                        
+                        <button type="button" class="add-option-btn">
+                            <i class="ri-add-line"></i> Add Another Option
+                        </button>
+                    </div>
+                `;
+                
+                questionsContainer.appendChild(newQuestion);
+                
+                // Setup new question event handlers
+                setupQuestionEventHandlers(newQuestion);
+                
+                // Scroll to new question
+                newQuestion.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // Setup initial event handlers
+            document.querySelectorAll('.question-card').forEach(setupQuestionEventHandlers);
+            
+            // Form submission
+            quizForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Collect form data
+                const quizData = {
+                    title: document.getElementById('quiz-title').value,
+                    description: document.getElementById('quiz-description').value,
+                    subject: document.getElementById('quiz-subject').value,
+                    duration: document.getElementById('quiz-duration').value,
+                    difficulty: document.getElementById('quiz-difficulty').value,
+                    questions: []
+                };
+                
+                // Collect questions data
+                document.querySelectorAll('.question-card').forEach(card => {
+                    const questionType = card.querySelector('.question-type-select').value;
+                    const questionText = card.querySelector('input[name="question_text"]').value;
+                    
+                    // Skip empty questions
+                    if (!questionText.trim()) return;
+                    
+                    const question = {
+                        question_text: questionText,
+                        question_type: questionType,
+                        options: []
+                    };
+                    
+                    // Collect options for multiple choice and true/false
+                    if (questionType === 'multiple_choice' || questionType === 'true_false') {
+                        card.querySelectorAll('.option-item').forEach(optionItem => {
+                            const optionText = optionItem.querySelector('.option-input').value;
+                            const isCorrect = optionItem.querySelector('.correct-checkbox').checked;
+                            
+                            // Skip empty options
+                            if (!optionText.trim()) return;
+                            
+                            question.options.push({
+                                option_text: optionText,
+                                is_correct: isCorrect
+                            });
+                            });
+                    }
+                    
+                    quizData.questions.push(question);
+                });
+                
+                // Validate at least one question exists
+                if (quizData.questions.length === 0) {
+                    alert('Please add at least one question to your quiz.');
+                    return;
+                }
+                
+                // Submit quiz data to server
+                fetch('/create_quiz', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(quizData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Show success message
+                        alert('Quiz created successfully!');
+                        // Redirect to teacher dashboard
+                        window.location.href = '{{ url_for("teacher_dashboard") }}';
+                    } else {
+                        alert('Error creating quiz: ' + (data.error || 'Unknown error'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while creating the quiz. Please try again.');
+                });
+            });
+            
+            // Helper function to setup question event handlers
+            function setupQuestionEventHandlers(questionCard) {
+                // Delete question button
+                const deleteBtn = questionCard.querySelector('.delete-btn');
+                if (deleteBtn) {
+                    deleteBtn.addEventListener('click', function() {
+                        if (document.querySelectorAll('.question-card').length > 1) {
+                            questionCard.remove();
+                            
+                            // Update question numbers
+                            document.querySelectorAll('.question-card').forEach((card, index) => {
+                                card.querySelector('.question-number').textContent = index + 1;
+                            });
+                        } else {
+                            alert('You must have at least one question in the quiz.');
+                        }
+                    });
+                }
+                
+                // Add option button
+                const addOptionBtn = questionCard.querySelector('.add-option-btn');
+                if (addOptionBtn) {
+                    addOptionBtn.addEventListener('click', function() {
+                        const optionsContainer = questionCard.querySelector('.options-container');
+                        const optionItems = optionsContainer.querySelectorAll('.option-item');
+                        const newOptionNumber = optionItems.length + 1;
+                        
+                        const newOption = document.createElement('div');
+                        newOption.className = 'option-item';
+                        newOption.innerHTML = `
+                            <input type="text" name="option_text" class="option-input" placeholder="Option ${newOptionNumber}">
+                            <input type="checkbox" name="is_correct" class="correct-checkbox" title="Mark as correct answer">
+                        `;
+                        
+                        // Insert before the add button
+                        optionsContainer.insertBefore(newOption, addOptionBtn);
+                    });
+                }
+                
+                // Question type change handler
+                const questionTypeSelect = questionCard.querySelector('.question-type-select');
+                if (questionTypeSelect) {
+                    questionTypeSelect.addEventListener('change', function() {
+                        const optionsContainer = questionCard.querySelector('.options-container');
+                        
+                        if (this.value === 'true_false') {
+                            // Clear existing options
+                            const optionItems = optionsContainer.querySelectorAll('.option-item');
+                            for (let i = optionItems.length - 1; i >= 0; i--) {
+                                optionItems[i].remove();
+                            }
+                            
+                            // Add True/False options
+                            const trueOption = document.createElement('div');
+                            trueOption.className = 'option-item';
+                            trueOption.innerHTML = `
+                                <input type="text" name="option_text" class="option-input" value="True" readonly>
+                                <input type="checkbox" name="is_correct" class="correct-checkbox" title="Mark as correct answer">
+                            `;
+                            
+                            const falseOption = document.createElement('div');
+                            falseOption.className = 'option-item';
+                            falseOption.innerHTML = `
+                                <input type="text" name="option_text" class="option-input" value="False" readonly>
+                                <input type="checkbox" name="is_correct" class="correct-checkbox" title="Mark as correct answer">
+                            `;
+                            
+                            // Hide add option button for true/false
+                            optionsContainer.querySelector('.add-option-btn').style.display = 'none';
+                            
+                            // Add options
+                            optionsContainer.insertBefore(trueOption, optionsContainer.querySelector('.add-option-btn'));
+                            optionsContainer.insertBefore(falseOption, optionsContainer.querySelector('.add-option-btn'));
+                        } else if (this.value === 'short_answer') {
+                            // Hide options for short answer
+                            optionsContainer.style.display = 'none';
+                        } else {
+                            // Show options container for multiple choice
+                            optionsContainer.style.display = 'block';
+                            
+                            // Show add option button
+                            optionsContainer.querySelector('.add-option-btn').style.display = 'flex';
+                            
+                            // Check if we need to reset from true/false
+                            const optionItems = optionsContainer.querySelectorAll('.option-item');
+                            if (optionItems.length === 2) {
+                                const firstValue = optionItems[0].querySelector('.option-input').value;
+                                const secondValue = optionItems[1].querySelector('.option-input').value;
+                                
+                                if (firstValue === 'True' && secondValue === 'False') {
+                                    // Reset options
+                                    for (let i = optionItems.length - 1; i >= 0; i--) {
+                                        optionItems[i].remove();
+                                    }
+                                    
+                                    // Add default multiple choice options
+                                    const option1 = document.createElement('div');
+                                    option1.className = 'option-item';
+                                    option1.innerHTML = `
+                                        <input type="text" name="option_text" class="option-input" placeholder="Option 1">
+                                        <input type="checkbox" name="is_correct" class="correct-checkbox" title="Mark as correct answer">
+                                    `;
+                                    
+                                    const option2 = document.createElement('div');
+                                    option2.className = 'option-item';
+                                    option2.innerHTML = `
+                                        <input type="text" name="option_text" class="option-input" placeholder="Option 2">
+                                        <input type="checkbox" name="is_correct" class="correct-checkbox" title="Mark as correct answer">
+                                    `;
+                                    
+                                    // Add options
+                                    optionsContainer.insertBefore(option1, optionsContainer.querySelector('.add-option-btn'));
+                                    optionsContainer.insertBefore(option2, optionsContainer.querySelector('.add-option-btn'));
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+                            

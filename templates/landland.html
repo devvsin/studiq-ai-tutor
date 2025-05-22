@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>StudiQ - Your AI Tutor</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: "Poppins", sans-serif;
+            }
+
+            body {
+                color: #fff;
+                min-height: 100vh;
+                overflow-x: hidden;
+            }
+
+            .hero-section {
+                background: linear-gradient(
+                    135deg,
+                    #0b0033 0%,
+                    #1a0040 50%,
+                    #240054 100%
+                );
+                min-height: 100vh;
+                position: relative;
+            }
+
+            .container {
+                max-width: 1800px;
+                margin: 0 auto;
+                padding: 0 4rem; /* Increased consistent side padding */
+                position: relative;
+            }
+
+            /* White spacer sections */
+            .white-spacer {
+                background-color: white;
+                padding: 3rem 0;
+                width: 100%;
+            }
+
+            /* Header Styles */
+            header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 2rem 0;
+            }
+
+            .left-header {
+                display: flex;
+                align-items: center;
+                gap: 2rem;
+                opacity: 0;
+                transform: translateY(-20px);
+                animation: fadeInDown 0.8s ease forwards;
+            }
+
+            .logo {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .logo-icon {
+                width: 40px;
+                height: 40px;
+                background-color: #a259ff;
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .lightning {
+                width: 24px;
+                height: 24px;
+                background-color: #fff;
+                clip-path: polygon(
+                    50% 0%,
+                    100% 50%,
+                    75% 50%,
+                    100% 100%,
+                    0% 100%,
+                    25% 50%,
+                    0% 50%
+                );
+                transform: rotate(90deg);
+            }
+
+            .logo-text {
+                font-size: 2rem;
+                font-weight: 700;
+                letter-spacing: -0.5px;
+            }
+
+            nav {
+                display: flex;
+                gap: 1.5rem;
+            }
+
+            nav a {
+                color: #fff;
+                text-decoration: none;
+                font-weight: 500;
+                transition: color 0.3s ease;
+            }
+
+            nav a:hover {
+                color: #a259ff;
+            }
+
+            .login-icon {
+                opacity: 0;
+                transform: translateY(-20px);
+                animation: fadeInDown 0.8s ease 0.4s forwards;
+                color: #fff;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .login-icon:hover {
+                color: #a259ff;
+                transform: scale(1.1);
+            }
+            
+            .login-icon i {
+                font-size: 28px;
+            }
+
+            /* Hero Section */
+            .hero {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 3rem 0;
+                gap: 2rem;
+                min-height: calc(100vh - 100px);
+            }
+
+            .hero-content {
+                max-width: 600px;
+                z-index: 2;
+            }
+
+            .hero-heading {
+                font-size: 4rem;
+                font-weight: 700;
+                line-height: 1.1;
+                margin-bottom: 1.5rem;
+                opacity: 0;
+                transform: translateX(-50px);
+                animation: fadeInLeft 1s ease 0.6s forwards;
+            }
+
+            .hero-subtext {
+                font-size: 1.5rem;
+                opacity: 0.8;
+                margin-bottom: 2.5rem;
+                opacity: 0;
+                transform: translateX(-50px);
+                animation: fadeInLeft 1s ease 0.8s forwards;
+            }
+
+            .hero-buttons {
+                display: flex;
+                gap: 2rem;
+                opacity: 0;
+                transform: translateY(20px);
+                animation: fadeInUp 1s ease 1s forwards;
+            }
+
+            /* New attractive buttons */
+            .btn-fancy {
+                font-size: 17px;
+                background: transparent;
+                border: none;
+                padding: 1em 1.5em;
+                color: #fff;
+                text-transform: uppercase;
+                position: relative;
+                transition: 0.5s ease;
+                cursor: pointer;
+                font-weight: 600;
+            }
+
+            .btn-fancy::before {
+                content: "";
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                height: 2px;
+                width: 0;
+                background-color: #a259ff;
+                transition: 0.5s ease;
+            }
+
+            .btn-fancy:hover {
+                color: #1e1e2b;
+                transition-delay: 0.5s;
+            }
+
+            .btn-fancy:hover::before {
+                width: 100%;
+            }
+
+            .btn-fancy::after {
+                content: "";
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                height: 0;
+                width: 100%;
+                background-color: #a259ff;
+                transition: 0.4s ease;
+                z-index: -1;
+            }
+
+            .btn-fancy:hover::after {
+                height: 100%;
+                transition-delay: 0.4s;
+            }
+
+            .btn-filled {
+                background-color: rgba(162, 89, 255, 0.2);
+                border: 1px solid #a259ff;
+            }
+
+            .btn-outline {
+                border: 1px solid rgba(255, 255, 255, 0.3);
+            }
+
+            /* Visual Elements - Orbits */
+            .visual-elements {
+                position: relative;
+                width: 600px;
+                height: 600px;
+                opacity: 0;
+                animation: fadeIn 1s ease 1.2s forwards;
+            }
+
+            .orbit-container {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 500px;
+                height: 500px;
+            }
+
+            .center-node {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 160px;
+                height: 160px;
+                background: linear-gradient(135deg, #5e2e99 0%, #6e2d9b 100%);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 0 40px rgba(110, 45, 155, 0.6);
+                z-index: 3;
+            }
+
+            .ai-icon {
+                width: 80px;
+                height: 80px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: rgba(163, 113, 247, 0.4);
+                border-radius: 50%;
+                box-shadow: 0 0 20px rgba(163, 113, 247, 0.6);
+            }
+
+            .orbit {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                border-radius: 50%;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                transform: translate(-50%, -50%);
+            }
+
+            .orbit-1 {
+                width: 280px;
+                height: 280px;
+                animation: pulse 4s infinite;
+            }
+
+            .orbit-2 {
+                width: 450px;
+                height: 450px;
+                animation: pulse 4s infinite 1s;
+            }
+
+            .icon-orbit {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+                animation-timing-function: linear;
+                animation-iteration-count: infinite;
+            }
+
+            .orbit-1-rotation {
+                animation-name: orbit;
+                animation-duration: 20s;
+            }
+
+            .orbit-2-rotation {
+                animation-name: orbit;
+                animation-duration: 30s;
+            }
+
+            .orbit-icon {
+                position: absolute;
+                width: 70px;
+                height: 70px;
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+            }
+
+            .brain-icon {
+                top: 0;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background-color: rgba(163, 113, 247, 0.4);
+            }
+
+            .book-icon {
+                bottom: 0;
+                left: 50%;
+                transform: translate(-50%, 50%);
+                background-color: rgba(79, 195, 247, 0.4);
+            }
+
+            .bulb-icon {
+                top: 20%;
+                right: 0;
+                transform: translate(50%, -50%);
+                background-color: rgba(255, 179, 0, 0.4);
+            }
+
+            .headphones-icon {
+                bottom: 20%;
+                right: 0;
+                transform: translate(50%, 50%);
+                background-color: rgba(233, 30, 99, 0.4);
+            }
+
+            /* Features Section */
+            .features-section {
+                background-color: #f9f9ff;
+                padding: 5rem 0;
+                color: #240054;
+                text-decoration: none;
+            }
+
+            .features-section a {
+                text-decoration: none;
+                color: inherit;
+            }
+
+            .features-section a:hover {
+                text-decoration: none;
+            }
+
+            .features-section h2 {
+                text-decoration: none;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+                font-weight: 700;
+                text-align: center;
+                margin-bottom: 3rem;
+                opacity: 0;
+            }
+
+            .feature-title-visible {
+                animation: fadeInUp 0.8s ease forwards;
+            }
+
+            /* Proper grid layout for feature cards */
+            .features-grid {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 2rem;
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+
+            .feature-card {
+                background-color: white;
+                border-radius: 10px;
+                padding: 2rem;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                opacity: 0;
+                transform: translateY(30px);
+                flex: 0 0 calc(33.33% - 2rem); /* Three cards per row */
+                max-width: calc(33.33% - 2rem);
+            }
+
+            /* Special styling for 4th and 5th cards (second row) */
+            .feature-card:nth-child(4),
+            .feature-card:nth-child(5) {
+                margin-top: 1rem;
+                flex: 0 0 calc(33.33% - 2rem);
+                max-width: calc(33.33% - 2rem);
+            }
+
+            .feature-visible {
+                animation: fadeInUp 0.8s ease forwards;
+            }
+
+            .feature-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            }
+
+            .feature-icon {
+                width: 60px;
+                height: 60px;
+                background-color: #f0e6ff;
+                border-radius: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 1.5rem;
+            }
+
+            .feature-icon svg {
+                width: 30px;
+                height: 30px;
+                fill: #a259ff;
+            }
+
+            .feature-title {
+                font-size: 1.3rem;
+                font-weight: 600;
+                margin-bottom: 0.75rem;
+                color: #240054;
+            }
+
+            .feature-text {
+                color: #666;
+                line-height: 1.6;
+            }
+
+            /* How It Works Section - Diagonal Layout */
+            .how-it-works-section {
+                background-color: white;
+                padding: 5rem 0;
+                color: #240054;
+                overflow: hidden; /* Prevents horizontal scroll from diagonal lines */
+            }
+
+            .steps-container {
+                position: relative;
+                max-width: 1000px;
+                margin: 0 auto;
+            }
+
+            .step {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                position: relative;
+                z-index: 2;
+                width: 100%;
+                max-width: 400px;
+                opacity: 0;
+                transform: translateY(30px);
+                margin-bottom: 5rem; /* Space between steps */
+                padding: 1.5rem;
+                border-radius: 10px;
+                background-color: #f9f9ff;
+                box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            }
+
+            /* Alternating left-right positioning */
+            .step:nth-child(odd) {
+                margin-left: 0;
+                margin-right: auto;
+                text-align: left;
+            }
+
+            .step:nth-child(even) {
+                margin-left: auto;
+                margin-right: 0;
+                text-align: right;
+                align-items: flex-end;
+            }
+
+            .step-visible {
+                animation: fadeInUp 0.8s ease forwards;
+            }
+
+            .step-number {
+                width: 60px;
+                height: 60px;
+                background-color: #a259ff;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.5rem;
+                font-weight: 600;
+                color: white;
+                margin-bottom: 1.5rem;
+                box-shadow: 0 5px 15px rgba(162, 89, 255, 0.3);
+                position: relative;
+            }
+
+            /* Diagonal connectors */
+            .step-connector {
+                position: absolute;
+                z-index: 1;
+                background-color: #d8c2ff;
+                height: 3px;
+                transform-origin: 0 0;
+                transform: rotate(45deg);
+                opacity: 0;
+                transition: width 1s ease, opacity 0.5s ease;
+            }
+
+            /* First connector (from step 1 to 2) */
+            .connector-1 {
+                top: 110px; /* Adjusted based on step positioning */
+                left: 40%;
+                width: 0; /* Initially zero width */
+            }
+
+            /* Second connector (from step 2 to 3) */
+            .connector-2 {
+                top: 280px; /* Adjusted based on step positioning */
+                right: 40%;
+                transform: rotate(-45deg);
+                transform-origin: 100% 0;
+                width: 0; /* Initially zero width */
+            }
+
+            /* Third connector (from step 3 to 4) */
+            .connector-3 {
+                top: 450px; /* Adjusted based on step positioning */
+                left: 40%;
+                width: 0; /* Initially zero width */
+            }
+
+            .connector-visible {
+                width: 60%; /* Final width of connector */
+                opacity: 1;
+            }
+
+            .step-title {
+                font-size: 1.2rem;
+                font-weight: 600;
+                margin-bottom: 0.75rem;
+                color: #240054;
+            }
+
+            .step-text {
+                color: #666;
+                font-size: 0.9rem;
+                line-height: 1.6;
+            }
+
+            /* Animations */
+            @keyframes fadeInDown {
+                0% {
+                    opacity: 0;
+                    transform: translateY(-20px);
+                }
+                100% {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            @keyframes fadeInLeft {
+                0% {
+                    opacity: 0;
+                    transform: translateX(-50px);
+                }
+                100% {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+
+            @keyframes fadeInUp {
+                0% {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                100% {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            @keyframes fadeIn {
+                0% {
+                    opacity: 0;
+                }
+                100% {
+                    opacity: 1;
+                }
+            }
+
+            @keyframes orbit {
+                0% {
+                    transform: rotate(0deg);
+                }
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
+
+            @keyframes pulse {
+                0% {
+                    box-shadow: 0 0 0 0 rgba(162, 89, 255, 0.1);
+                }
+                50% {
+                    box-shadow: 0 0 0 20px rgba(162, 89, 255, 0);
+                }
+                100% {
+                    box-shadow: 0 0 0 0 rgba(162, 89, 255, 0);
+                }
+            }
+
+            /* Footer Styles */
+            .footer {
+                background: linear-gradient(
+                    135deg,
+                    #0b0033 0%,
+                    #1a0040 50%,
+                    #240054 100%
+                );
+                padding: 5rem 0 3rem; /* Increased padding */
+                color: rgba(255, 255, 255, 0.8);
+            }
+
+            .footer-content {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 2rem;
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+
+            .footer-links {
+                display: flex;
+                gap: 3rem; /* Increased gap between links */
+            }
+
+            .footer-links a {
+                color: rgba(255, 255, 255, 0.8);
+                text-decoration: none;
+                transition: color 0.3s ease;
+                font-size: 1.1rem; /* Slightly larger font */
+                position: relative;
+            }
+
+            .footer-links a:hover {
+                color: #a259ff;
+            }
+            
+            /* Add underline effect to footer links */
+            .footer-links a::after {
+                content: '';
+                position: absolute;
+                width: 0;
+                height: 2px;
+                bottom: -5px;
+                left: 0;
+                background-color: #a259ff;
+                transition: width 0.3s ease;
+            }
+
+            .footer-links a:hover::after {
+                width: 100%;
+            }
+
+            .copyright {
+                color: rgba(255, 255, 255, 0.6);
+                font-size: 1rem;
+            }
+
+            /* User menu */
+            .user-menu {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                color: white;
+            }
+
+            .user-name {
+                font-size: 1rem;
+                font-weight: 500;
+            }
+
+            /* Responsive Design */
+            @media (max-width: 1200px) {
+                .hero-heading {
+                    font-size: 3.5rem;
+                }
+
+                .visual-elements {
+                    width: 500px;
+                    height: 500px;
+                }
+
+                .orbit-container {
+                    width: 450px;
+                    height: 450px;
+                }
+
+                .orbit-2 {
+                    width: 400px;
+                    height: 400px;
+                }
+                
+                .steps-container {
+                    max-width: 800px;
+                }
+                
+                /* Adjust the features grid for smaller screens */
+                .feature-card:nth-child(4),
+                .feature-card:nth-child(5) {
+                    max-width: calc(50% - 1rem);
+                }
+            }
+
+            @media (max-width: 992px) {
+                .hero {
+                    flex-direction: column;
+                    text-align: center;
+                    padding-top: 1rem;
+                }
+
+                .hero-content {
+                    max-width: 100%;
+                }
+
+                .hero-buttons {
+                    justify-content: center;
+                }
+
+                .visual-elements {
+                    margin-top: 2rem;
+                    width: 400px;
+                    height: 400px;
+                }
+
+                .orbit-container {
+                    width: 350px;
+                    height: 350px;
+                }
+
+                .center-node {
+                    width: 120px;
+                    height: 120px;
+                }
+
+                .orbit-1 {
+                    width: 220px;
+                    height: 220px;
+                }
+
+                .orbit-2 {
+                    width: 320px;
+                    height: 320px;
+                }
+
+                .orbit-icon {
+                    width: 60px;
+                    height: 60px;
+                }
+                
+                /* Feature cards responsive */
+                .feature-card {
+                    flex: 0 0 calc(50% - 2rem);
+                    max-width: calc(50% - 2rem);
+                }
+                
+                .feature-card:nth-child(4),
+                .feature-card:nth-child(5) {
+                    flex: 0 0 calc(50% - 2rem);
+                    max-width: calc(50% - 2rem);
+                }
+                
+                /* Steps responsive */
+                .step {
+                    max-width: 80%;
+                    margin-left: auto !important;
+                    margin-right: auto !important;
+                    text-align: center !important;
+                    align-items: center !important;
+                }
+                
+                .step-connector {
+                    display: none;
+                }
+                
+                .container {
+                    padding: 0 2rem; /* Reduced side padding for tablet */
+                }
+            }
+
+            @media (max-width: 768px) {
+                header {
+                    flex-direction: column;
+                    gap: 1.5rem;
+                }
+
+                .left-header {
+                    flex-direction: column;
+                    gap: 1rem;
+                }
+
+                .hero-heading {
+                    font-size: 2.8rem;
+                }
+
+                .hero-subtext {
+                    font-size: 1.2rem;
+                }
+                
+                .feature-card,
+                .feature-card:nth-child(4),
+                .feature-card:nth-child(5) {
+                    flex: 0 0 100%;
+                    max-width: 100%;
+                }
+                
+                .footer-content {
+                    flex-direction: column;
+                    text-align: center;
+                }
+                
+                .footer-links {
+                    margin-top: 1rem;
+                }
+                
+                .container {
+                    padding: 0 1.5rem; /* Further reduced side padding for mobile */
+                }
+            }
+
+            @media (max-width: 576px) {
+                .container {
+                    padding: 0 1rem;
+                }
+
+                .hero-heading {
+                    font-size: 2.2rem;
+                }
+
+                .hero-subtext {
+                    font-size: 1rem;
+                }
+
+                .hero-buttons {
+                    flex-direction: column;
+                    width: 100%;
+                }
+
+                .btn-large {
+                    width: 100%;
+                }
+
+                .visual-elements {
+                    width: 300px;
+                    height: 300px;
+                }
+
+                .orbit-container {
+                    width: 280px;
+                    height: 280px;
+                }
+
+                .center-node {
+                    width: 100px;
+                    height: 100px;
+                }
+
+                .orbit-1 {
+                    width: 180px;
+                    height: 180px;
+                }
+
+                .orbit-2 {
+                    width: 250px;
+                    height: 250px;
+                }
+
+                .orbit-icon {
+                    width: 50px;
+                    height: 50px;
+                }
+
+                .orbit-icon svg {
+                    width: 25px;
+                    height: 25px;
+                }
+                
+                .ai-icon {
+                    width: 60px;
+                    height: 60px;
+                }
+                
+                .footer-links {
+                    flex-direction: column;
+                    gap: 1rem;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <section class="hero-section">
+            <div class="container">
+                <header>
+                    <div class="left-header">
+                        <div class="logo">
+                            <div class="logo-icon">
+                                <div class="lightning"></div>
+                            </div>
+                            <a href="{{ url_for('home') }}" style="text-decoration: none; color: inherit;">
+                                <div class="logo-text">StudiQ</div>
+                            </a>
+                        </div>
+                        <nav>
+                            <a href="{{ url_for('academics') }}">Academics</a>
+                            <a href="#how-it-works">How It Works</a>
+                        </nav>
+                    </div>
+                    <div class="login-icon">
+                        {% if session.user_email %}
+                        <div class="user-menu">
+                            <span class="user-name">{{ session.user_name }}</span>
+                            <a href="{{ url_for('logout') }}" style="color: inherit; text-decoration: none;" title="Logout">
+                                <i class="ri-logout-box-line"></i>
+                            </a>
+                        </div>
+                        {% else %}
+                        <a href="{{ url_for('loginpage') }}" style="color: inherit; text-decoration: none;" title="Login">
+                            <i class="ri-user-3-line"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                </header>
+
+                <section class="hero">
+                    <div class="hero-content">
+                        <h1 class="hero-heading">
+                            Your AI Tutor. <br />Personalized for You.
+                        </h1>
+                        <p class="hero-subtext">
+                            StudiQ learns how you learn. Adaptive lessons. Smarter
+                            outcomes.
+                        </p>
+                        <div class="hero-buttons">
+                            {% if session.user_email %}
+                                {% if has_completed_quiz(session.user_email) %}
+                                <a href="{{ url_for('app_dashboard') }}">
+                                    <button class="btn-fancy btn-filled">
+                                        Go to Dashboard
+                                    </button>
+                                </a>
+                                {% else %}
+                                <a href="{{ url_for('quiz') }}">
+                                    <button class="btn-fancy btn-filled">
+                                        Complete Quiz
+                                    </button>
+                                </a>
+                                {% endif %}
+                            {% else %}
+                            <a href="{{ url_for('loginpage') }}">
+                                <button class="btn-fancy btn-filled">
+                                    Get Started
+                                </button>
+                            </a>
+                            {% endif %}
+                            <button class="btn-fancy btn-outline">
+                                Watch Demo
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="visual-elements">
+                        <div class="orbit-container">
+                            <div class="center-node">
+                                <div class="ai-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#E8E9FF" width="40" height="40">
+                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-6h2v2h-2zm0-8h2v6h-2z"/>
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <div class="orbit orbit-1"></div>
+                            <div class="icon-orbit orbit-1-rotation">
+                                <div class="orbit-icon brain-icon">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        fill="#E8E9FF"
+                                        width="35"
+                                        height="35"
+                                    >
+                                        <path
+                                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-12h2v6h-2zm0 8h2v2h-2z"
+                                        />
+                                    </svg>
+                                </div>
+                                <div class="orbit-icon book-icon">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        fill="#E8E9FF"
+                                        width="35"
+                                        height="35"
+                                    >
+                                        <path
+                                            d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5-1.95 0-4.05.4-5.5 1.5v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05 1.35-.65 3.3-1.1 4.75-1.1 1.95 0 4.05.4 5.5 1.5 1.45-1.1 3.55-1.5 5.5-1.5 1.65 0 3.35.25 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1zm0 13.5c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V8c1.35-.85 3.8-1.5 5.5-1.5 1.2 0 2.4.15 3.5.5v11.5z"
+                                        />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="orbit orbit-2"></div>
+                            <div class="icon-orbit orbit-2-rotation">
+                                <div class="orbit-icon bulb-icon">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        fill="#E8E9FF"
+                                        width="35"
+                                        height="35"
+                                    >
+                                        <path
+                                            d="M12 2C8.13 2 5 5.13 5 9c0 3.31 2.69 6 6 6h1v4h-1v2h4v-2h-1v-4h1c3.31 0 6-2.69 6-6s-2.69-7-6-7zm0 14h-1v-4h1v4zm0-10c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4z"
+                                        />
+                                    </svg>
+                                </div>
+                                <div class="orbit-icon headphones-icon">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        fill="#E8E9FF"
+                                        width="35"
+                                        height="35"
+                                    >
+                                        <path
+                                            d="M12 1c-4.97 0-9 4.03-9 9v7c0 1.66 1.34 3 3 3h3v-8H5v-2c0-3.87 3.13-7 7-7s7 3.13 7 7v2h-4v8h3c1.66 0 3-1.34 3-3v-7c0-4.97-4.03-9-9-9z"
+                                        />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </section>
+        
+        <!-- White spacer before features -->
+        <section class="white-spacer"></section>
+
+        <!-- Features Section -->
+        <section class="features-section" id="features">
+            <div class="container">
+                <h2 class="section-title" id="features-title">Why Choose StudiQ?</h2>
+                <div class="features-grid">
+                    <div class="feature-card" id="feature-1">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8zm-1-5h2v2h-2zm0-8h2v6h-2z"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">AI-Powered Personalization</h3>
+                        <p class="feature-text">Our AI analyzes your learning patterns and adapts content to match your unique needs.</p>
+                    </div>
+
+                    <div class="feature-card" id="feature-2">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Adaptive Learning Paths</h3>
+                        <p class="feature-text">Customized educational journeys that evolve with your progress and understanding.</p>
+                    </div>
+
+                    <div class="feature-card" id="feature-3">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Multiple Learning Styles</h3>
+                        <p class="feature-text">Whether visual, auditory, or hands-on, we deliver content in the format that works best for you.</p>
+                    </div>
+
+                    <div class="feature-card" id="feature-4">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Real-time Progress</h3>
+                        <p class="feature-text">Track your improvements with detailed analytics and personalized feedback.</p>
+                    </div>
+
+                    <div class="feature-card" id="feature-5">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Learning Security</h3>
+                        <p class="feature-text">Your learning data is private and secure, used solely to improve your educational experience.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- White spacer between sections -->
+        <section class="white-spacer"></section>
+
+        <!-- How It Works Section -->
+        <section class="how-it-works-section" id="how-it-works">
+            <div class="container">
+                <h2 class="section-title" id="how-title">How It Works</h2>
+                <div class="steps-container">
+                    <div class="step-connector connector-1" id="connector-1"></div>
+                    <div class="step-connector connector-2" id="connector-2"></div>
+                    <div class="step-connector connector-3" id="connector-3"></div>
+                    
+                    <div class="step" id="step-1">
+                        <div class="step-number">1</div>
+                        <h3 class="step-title">Answer Questions</h3>
+                        <p class="step-text">Tell us about your learning preferences and goals</p>
+                    </div>
+                    
+                    <div class="step" id="step-2">
+                        <div class="step-number">2</div>
+                        <h3 class="step-title">AI Adapts</h3>
+                        <p class="step-text">Our AI creates your personalized learning path</p>
+                    </div>
+                    
+                    <div class="step" id="step-3">
+                        <div class="step-number">3</div>
+                        <h3 class="step-title">Start Learning</h3>
+                        <p class="step-text">Engage with content tailored specifically for you</p>
+                    </div>
+                    
+                    <div class="step" id="step-4">
+                        <div class="step-number">4</div>
+                        <h3 class="step-title">Track Progress</h3>
+                        <p class="step-text">Watch as you master concepts at your own pace</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- White spacer after how it works -->
+        <section class="white-spacer"></section>
+
+        <!-- Footer Section -->
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="copyright">
+                        © 2025 StudiQ. All rights reserved.
+                    </div>
+                    <div class="footer-links">
+                        <a href="#">About Us</a>
+                        <a href="#">Contact</a>
+                        <a href="#">Privacy Policy</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <script>
+            // Intersection Observer for animations
+            document.addEventListener('DOMContentLoaded', function() {
+                // Features section animations
+                const featuresTitle = document.getElementById('features-title');
+                const featureCards = document.querySelectorAll('.feature-card');
+                const howTitle = document.getElementById('how-title');
+                const steps = document.querySelectorAll('.step');
+                const connectors = document.querySelectorAll('.step-connector');
+                
+                const observerOptions = {
+                    threshold: 0.2,
+                    rootMargin: '0px 0px -100px 0px'
+                };
+                
+                // Observer for section titles and feature cards
+                const observer = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            if (entry.target.classList.contains('section-title')) {
+                                entry.target.classList.add('feature-title-visible');
+                            } else if (entry.target.classList.contains('feature-card')) {
+                                entry.target.classList.add('feature-visible');
+                            } else if (entry.target.classList.contains('step')) {
+                                entry.target.classList.add('step-visible');
+                                
+                                // Animate the appropriate connector when step comes into view
+                                const stepId = entry.target.id;
+                                if (stepId === 'step-1') {
+                                    setTimeout(() => {
+                                        document.getElementById('connector-1').classList.add('connector-visible');
+                                    }, 500);
+                                } else if (stepId === 'step-2') {
+                                    setTimeout(() => {
+                                        document.getElementById('connector-2').classList.add('connector-visible');
+                                    }, 500);
+                                } else if (stepId === 'step-3') {
+                                    setTimeout(() => {
+                                        document.getElementById('connector-3').classList.add('connector-visible');
+                                    }, 500);
+                                }
+                            }
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, observerOptions);
+                
+                // Observe features section
+                observer.observe(featuresTitle);
+                featureCards.forEach((card, index) => {
+                    card.style.animationDelay = `${0.1 * index}s`;
+                    observer.observe(card);
+                });
+                
+                // Observe how it works section
+                observer.observe(howTitle);
+                steps.forEach((step, index) => {
+                    step.style.animationDelay = `${0.2 * index}s`;
+                    observer.observe(step);
+                });
+            });
+        </script>
+    </body>
+</html>

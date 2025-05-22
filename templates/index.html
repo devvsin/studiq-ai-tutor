@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudiQ - AI Tutor</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        /* Additional styles for the collapsible sidebar */
+        .sidebar-toggle {
+            position: absolute;
+            top: 50%;
+            right: -15px;
+            height: 50px;
+            width: 15px;
+            background-color: #f3f4f8;
+            border: 1px solid #e4e7ec;
+            border-left: none;
+            border-radius: 0 5px 5px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transform: translateY(-50%);
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-toggle:hover {
+            background-color: #e4e7ec;
+        }
+
+        .sidebar-toggle i {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .sidebar.collapsed {
+            width: 0;
+            min-width: 0;
+            padding: 0;
+            border: none;
+            overflow: hidden;
+        }
+
+        .sidebar.collapsed .sidebar-header,
+        .sidebar.collapsed .chat-list,
+        .sidebar.collapsed .sidebar-footer {
+            display: none;
+        }
+
+        .sidebar-toggle.collapsed {
+            right: -15px;
+            border-right: 1px solid #e4e7ec;
+            border-left: none;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-name {
+            font-size: var(--font-sm);
+            font-weight: 500;
+        }
+
+        /* Toast notifications for feedback */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            border-radius: 4px;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast-success {
+            background-color: rgba(59, 130, 246, 0.9);
+        }
+
+        .toast-error {
+            background-color: rgba(239, 68, 68, 0.9);
+        }
+
+        .toast-info {
+            background-color: rgba(79, 70, 229, 0.9);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                left: -100%;
+                top: 0;
+                bottom: 0;
+                z-index: 20;
+                width: 75%;
+                max-width: 18rem;
+                box-shadow: var(--shadow-md);
+            }
+            
+            .sidebar.active {
+                left: 0;
+            }
+
+            .sidebar-toggle {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="left-header">
+                <button class="mobile-menu-btn" id="mobile-menu-btn">
+                    <i class="ri-menu-line"></i>
+                </button>
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="ri-flashlight-line"></i>
+                    </div>
+                    <a href="{{ url_for('home') }}" style="text-decoration: none; color: inherit;">
+                        <div class="logo-text">StudiQ</div>
+                    </a>
+                </div>
+                <nav>
+                    <a href="{{ url_for('home') }}">Home</a>
+                    <a href="{{ url_for('academics') }}">Academics</a>
+                </nav>
+            </div>
+            <div class="login-icon">
+                {% if session.user_name %}
+                <div class="user-menu">
+                    <span class="user-name">{{ session.user_name }}</span>
+                    <a href="{{ url_for('logout') }}" style="color: inherit; text-decoration: none;" title="Logout">
+                        <i class="ri-logout-box-line"></i>
+                    </a>
+                </div>
+                {% else %}
+                <a href="{{ url_for('loginpage') }}" style="color: inherit; text-decoration: none;" title="Login">
+                    <i class="ri-user-3-line"></i>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Overlay for mobile menu -->
+        <div class="overlay" id="overlay"></div>
+        
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-toggle" id="sidebar-toggle">
+                <i class="ri-arrow-left-line"></i>
+            </div>
+            <div class="sidebar-header">
+                <h2 class="sidebar-title">Previous Chats</h2>
+                <button class="sidebar-close-btn" id="sidebar-close-btn">
+                    <i class="ri-close-line"></i>
+                </button>
+            </div>
+            
+            <div class="chat-list" id="chat-list">
+                <div class="chat-item active">
+                    <h3 class="chat-title">Current Session</h3>
+                    <p class="chat-date" id="current-date">Today</p>
+                </div>
+                <!-- More chat items will be added dynamically -->
+            </div>
+            
+            <div class="sidebar-footer">
+                <button class="btn btn-primary" id="upload-btn">
+                    <i class="ri-upload-line"></i>
+                    Upload Document
+                </button>
+                <input type="file" id="file-upload" style="display: none;">
+                <select class="btn btn-secondary" id="learning-style">
+                    <option value="blended">Blended Learning</option>
+                    <option value="visual">Visual Learning</option>
+                    <option value="auditory">Auditory Learning</option>
+                    <option value="hands-on">Hands-on Learning</option>
+                    <option value="reading">Reading/Writing</option>
+                </select>
+            </div>
+        </aside>
+        
+        <!-- Chat Area -->
+        <main class="chat-area">
+            <div class="chat-messages" id="chat-messages">
+                <!-- Message content will be added dynamically -->
+            </div>
+
+            <div class="chat-header">
+    <button id="quiz-button" class="quiz-button">
+        <i class="ri-question-answer-line"></i>
+        Take a Quiz
+    </button>
+</div>
+            
+            <div class="typing-indicator" id="typing-indicator">
+                <div class="typing-bubble">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            </div>
+            
+            <div class="chat-input-container">
+                <div class="chat-input-wrapper">
+                    <button class="attachment-btn" title="Upload file" id="attachment-btn">
+                        <i class="ri-attachment-2"></i>
+                    </button>
+                    <input 
+                        type="text" 
+                        class="chat-input" 
+                        id="chat-input" 
+                        placeholder="Type your message..."
+                    />
+                    <button class="send-btn disabled" id="send-btn">
+                        <i class="ri-send-plane-fill"></i>
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script>
+        // Additional script for the collapsible sidebar
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarToggle = document.getElementById('sidebar-toggle');
+            const sidebar = document.getElementById('sidebar');
+            
+            // Toggle sidebar visibility
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('collapsed');
+                
+                // Update the toggle icon
+                if (sidebar.classList.contains('collapsed')) {
+                    sidebarToggle.innerHTML = '<i class="ri-arrow-right-line"></i>';
+                    sidebarToggle.classList.add('collapsed');
+                } else {
+                    sidebarToggle.innerHTML = '<i class="ri-arrow-left-line"></i>';
+                    sidebarToggle.classList.remove('collapsed');
+                }
+            });
+            
+            // Function to create toast notifications
+            window.showToast = function(message, type = 'info') {
+                // Remove existing toast if any
+                const existingToast = document.querySelector('.toast');
+                if (existingToast) {
+                    existingToast.remove();
+                }
+                
+                // Create new toast
+                const toast = document.createElement('div');
+                toast.className = `toast toast-${type}`;
+                toast.textContent = message;
+                
+                // Add to body
+                document.body.appendChild(toast);
+                
+                // Show toast
+                setTimeout(() => {
+                    toast.classList.add('show');
+                }, 10);
+                
+                // Hide after 3 seconds
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    setTimeout(() => {
+                        toast.remove();
+                    }, 300);
+                }, 5000); // Show for 5 seconds
+            };
+        });
+    </script>
+</body>
+</html>

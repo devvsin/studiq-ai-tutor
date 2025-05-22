@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudiQ - Login & Signup</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base Styles */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --color-primary: #a259ff;
+            --color-primary-dark: #8a42f5;
+            --color-primary-light: #c79fff;
+            --color-primary-lightest: #f3eaff;
+            
+            --color-bg-main: #f9fafb;
+            --color-bg-sidebar: #f3f4f8;
+            --color-bg-white: #ffffff;
+            
+            --color-text-dark: #1f2937;
+            --color-text-medium: #4b5563;
+            --color-text-light: #6b7280;
+            
+            --color-border: #e4e7ec;
+            --color-border-light: #f0f1f5;
+            
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            
+            --transition-slow: 0.3s ease;
+            --transition-fast: 0.15s ease;
+            
+            --radius-sm: 0.25rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-full: 9999px;
+            
+            --font-xs: 0.75rem;
+            --font-sm: 0.8125rem;
+            --font-base: 0.875rem;
+            --font-md: 1rem;
+            --font-lg: 1.125rem;
+            --font-xl: 1.5rem;
+            --font-2xl: 2rem;
+            --font-3xl: 2.5rem;
+            
+            --spacing-1: 0.25rem;
+            --spacing-2: 0.5rem;
+            --spacing-3: 0.75rem;
+            --spacing-4: 1rem;
+            --spacing-5: 1.5rem;
+            --spacing-6: 2rem;
+            --spacing-8: 3rem;
+        }
+        
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--color-text-dark);
+            font-size: var(--font-base);
+            line-height: 1.5;
+            background-color: var(--color-bg-main);
+        }
+        
+        a {
+            color: var(--color-primary);
+            text-decoration: none;
+            transition: color var(--transition-fast);
+        }
+        
+        a:hover {
+            color: var(--color-primary-dark);
+            text-decoration: underline;
+        }
+        
+        /* Layout - Fixed to ensure equal heights */
+        .login-container {
+            display: table; /* Using table layout for equal heights */
+            width: 100%;
+            table-layout: fixed;
+            height: 100%;
+        }
+        
+        .content-section, .form-section {
+            display: table-cell; /* Table cell to ensure equal heights */
+            vertical-align: top;
+        }
+        
+        .content-section {
+            width: 60%;
+            background: linear-gradient(135deg, #0b0033 0%, #1a0040 50%, #240054 100%);
+            color: white;
+            padding: var(--spacing-6);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .form-section {
+            width: 40%;
+            max-width: 450px;
+            background-color: var(--color-bg-white);
+            padding: var(--spacing-6);
+            padding-bottom: calc(var(--spacing-6) * 2);
+        }
+        
+        /* Logo */
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: var(--spacing-8);
+        }
+        
+        .logo-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            background-color: var(--color-primary);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .lightning {
+            width: 1.5rem;
+            height: 1.5rem;
+            background-color: #fff;
+            clip-path: polygon(
+                50% 0%,
+                100% 50%,
+                75% 50%,
+                100% 100%,
+                0% 100%,
+                25% 50%,
+                0% 50%
+            );
+            transform: rotate(90deg);
+        }
+        
+        .logo-text {
+            font-size: var(--font-xl);
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        
+        /* Content Section */
+        .content-tag {
+            font-size: var(--font-sm);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+            margin-bottom: var(--spacing-4);
+            opacity: 0.8;
+        }
+        
+        .content-heading {
+            font-size: var(--font-3xl);
+            font-weight: 700;
+            margin-bottom: var(--spacing-5);
+            line-height: 1.3;
+        }
+        
+        .content-text {
+            margin-bottom: var(--spacing-6);
+            opacity: 0.9;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: var(--spacing-3) var(--spacing-6);
+            background-color: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            width: 100%;
+            padding: var(--spacing-3);
+            background-color: white;
+            color: var(--color-text-medium);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            font-weight: 500;
+            font-size: var(--font-base);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-2);
+        }
+        
+        .cta-button {
+            font-size: 17px;
+            background: transparent;
+            border: none;
+            padding: 1em 1.5em;
+            color: #fff;
+            text-transform: uppercase;
+            position: relative;
+            transition: 0.5s ease;
+            cursor: pointer;
+            font-weight: 600;
+            max-width: 200px;
+        }
+        
+        .cta-button:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+            text-decoration: none;
+            color: white;
+        }
+        
+        /* Abstract background decoration */
+        .bg-decoration {
+            position: absolute;
+            bottom: -100px;
+            right: -100px;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(162, 89, 255, 0.4) 0%, rgba(162, 89, 255, 0) 70%);
+            border-radius: 50%;
+            z-index: 0;
+        }
+        
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+            margin-top: auto;
+        }
+        
+        /* Form Section */
+        .form-header {
+            margin-bottom: var(--spacing-6);
+        }
+        
+        .form-title {
+            font-size: var(--font-xl);
+            font-weight: 600;
+            margin-bottom: var(--spacing-2);
+            color: var(--color-text-dark);
+        }
+        
+        .form-subtitle {
+            color: var(--color-text-medium);
+            font-size: var(--font-sm);
+        }
+        
+        .form-control {
+            margin-bottom: var(--spacing-4);
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: var(--spacing-2);
+            font-weight: 500;
+            font-size: var(--font-sm);
+            color: var(--color-text-medium);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: var(--spacing-3);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            font-family: 'Poppins', sans-serif;
+            font-size: var(--font-base);
+            background-color: var(--color-bg-main);
+            transition: all var(--transition-fast);
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(162, 89, 255, 0.15);
+        }
+        
+        .form-input::placeholder {
+            color: var(--color-text-light);
+            opacity: 0.7;
+        }
+        
+        .form-checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: var(--spacing-4);
+        }
+        
+        .form-checkbox {
+            width: 18px;
+            height: 18px;
+            margin-right: var(--spacing-2);
+            accent-color: var(--color-primary);
+        }
+        
+        .form-checkbox-label {
+            font-size: var(--font-sm);
+            color: var(--color-text-medium);
+        }
+        
+        .submit-button {
+            width: 100%;
+            padding: var(--spacing-3);
+            background-color: var(--color-primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: var(--font-base);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            margin-bottom: var(--spacing-4);
+            text-align: center;
+        }
+        
+        .submit-button:hover {
+            background-color: var(--color-primary-dark);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .social-login {
+            width: 100%;
+            padding: var(--spacing-3);
+            background-color: white;
+            color: var(--color-text-medium);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            font-weight: 500;
+            font-size: var(--font-base);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-2);
+        }
+        
+        .social-login:hover {
+            background-color: var(--color-bg-main);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .social-login i {
+            font-size: var(--font-md);
+        }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: var(--spacing-4) 0;
+            color: var(--color-text-light);
+            font-size: var(--font-sm);
+        }
+        
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background-color: var(--color-border);
+        }
+        
+        .divider::before {
+            margin-right: var(--spacing-3);
+        }
+        
+        .divider::after {
+            margin-left: var(--spacing-3);
+        }
+        
+        .form-footer {
+            text-align: center;
+            font-size: var(--font-sm);
+            color: var(--color-text-medium);
+            margin-top: var(--spacing-4);
+        }
+        
+        /* Role selection */
+        .role-selection {
+            display: flex;
+            gap: var(--spacing-3);
+            margin-bottom: var(--spacing-4);
+        }
+        
+        .role-option {
+            flex: 1;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-3);
+            cursor: pointer;
+            text-align: center;
+            transition: all var(--transition-fast);
+        }
+        
+        .role-option.selected {
+            border-color: var(--color-primary);
+            background-color: var(--color-primary-lightest);
+            box-shadow: 0 0 0 3px rgba(162, 89, 255, 0.15);
+        }
+        
+        .role-option:hover:not(.selected) {
+            background-color: var(--color-bg-main);
+        }
+        
+        .role-icon {
+            font-size: 1.5rem;
+            color: var(--color-text-medium);
+            margin-bottom: var(--spacing-2);
+        }
+        
+        .selected .role-icon {
+            color: var(--color-primary);
+        }
+        
+        .role-label {
+            font-weight: 500;
+            font-size: var(--font-sm);
+            color: var(--color-text-medium);
+        }
+        
+        .selected .role-label {
+            color: var(--color-primary-dark);
+        }
+        
+        /* Signup/Login toggle */
+        .form-toggle {
+            display: flex;
+            margin-bottom: var(--spacing-6);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+        }
+        
+        .toggle-option {
+            flex: 1;
+            padding: var(--spacing-2) var(--spacing-3);
+            text-align: center;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: var(--font-sm);
+            transition: all var(--transition-fast);
+            background-color: var(--color-bg-main);
+            color: var(--color-text-medium);
+        }
+        
+        .toggle-option.active {
+            background-color: var(--color-primary);
+            color: white;
+        }
+        
+        /* Form transitions */
+        .form-container {
+            position: relative;
+            min-height: 350px;
+            margin-bottom: var(--spacing-6);
+        }
+        
+        .login-form,
+        .signup-form {
+            position: absolute;
+            width: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-slow);
+            transform: translateY(10px);
+        }
+        
+        .login-form.active,
+        .signup-form.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .login-container {
+                display: block; /* Switch to block for mobile */
+                height: auto;
+            }
+            
+            .content-section, 
+            .form-section {
+                display: block;
+                width: 100%;
+                max-width: 100%;
+            }
+            
+            .content-section {
+                padding: var(--spacing-5);
+                min-height: 300px;
+            }
+            
+            .form-section {
+                padding: var(--spacing-5);
+                padding-bottom: calc(var(--spacing-5) * 2);
+            }
+            
+            .content-heading {
+                font-size: var(--font-2xl);
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .content-section {
+                padding: var(--spacing-4);
+            }
+            
+            .form-section {
+                padding: var(--spacing-4);
+                padding-bottom: calc(var(--spacing-4) * 2);
+            }
+            
+            .content-heading {
+                font-size: var(--font-xl);
+            }
+            
+            .role-selection {
+                flex-direction: column;
+            }
+        }
+
+        /* Add these styles to your existing CSS */
+        .flash-messages {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            max-width: 400px;
+        }
+
+        .flash-message {
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            border-radius: var(--radius-md);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: slideIn 0.3s ease-out;
+            box-shadow: var(--shadow-md);
+        }
+
+        .flash-message.success {
+            background-color: #10B981;
+            color: white;
+        }
+
+        .flash-message.error {
+            background-color: #EF4444;
+            color: white;
+        }
+
+        .flash-close {
+            background: none;
+            border: none;
+            color: inherit;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0 5px;
+            opacity: 0.7;
+            transition: opacity var(--transition-fast);
+        }
+
+        .flash-close:hover {
+            opacity: 1;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .form-input.error {
+            border-color: #EF4444;
+        }
+
+        .error-message {
+            color: #EF4444;
+            font-size: var(--font-xs);
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <!-- Flash Messages -->
+        <div class="flash-messages">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}">
+                            {{ message }}
+                            <button class="flash-close">&times;</button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+        
+        <!-- Content Section -->
+        <section class="content-section">
+            <div class="logo">
+                <div class="logo-icon">
+                    <div class="lightning"></div>
+                </div>
+                <a href="{{ url_for('home') }}" style="text-decoration: none; color: inherit;">
+                    <div class="logo-text">StudiQ</div>
+                </a>
+            </div>
+            
+            <div class="content-wrapper">
+                <div class="content-tag">AI-Powered Learning</div>
+                <h1 class="content-heading">Personalized Education Tailored to You</h1>
+                <p class="content-text">
+                    StudiQ uses advanced AI to adapt to your learning style, making education more
+                    efficient and engaging. Whether you're a student seeking knowledge or a teacher
+                    looking to elevate your teaching, StudiQ is designed for you.
+                </p>
+                <a href="{{ url_for('home') }}#features" class="cta-button">View Features</a>
+            </div>
+            
+            <div class="bg-decoration"></div>
+            <div class="bg-decoration" style="top: 60%; left: -100px; opacity: 0.3;"></div>
+            <div class="bg-decoration" style="bottom: 10%; left: 60%; width: 300px; height: 300px; opacity: 0.2;"></div>
+        </section>
+        
+        <!-- Form Section -->
+        <section class="form-section">
+            <div class="form-toggle">
+                <div class="toggle-option active" id="login-toggle">Sign In</div>
+                <div class="toggle-option" id="signup-toggle">Sign Up</div>
+            </div>
+            
+            <div class="form-container">
+                <!-- Login Form -->
+                <form class="login-form active" method="POST" action="{{ url_for('login') }}">
+                    <div class="form-header">
+                        <h2 class="form-title">Welcome back</h2>
+                        <p class="form-subtitle">Sign in to your account to continue</p>
+                    </div>
+                
+                    <div class="form-control">
+                        <label for="login-email" class="form-label">Email</label>
+                        <input 
+                            type="email" 
+                            id="login-email" 
+                            name="login-email"
+                            class="form-input" 
+                            placeholder="Enter your email"
+                            required
+                        >
+                    </div>
+                
+                    <div class="form-control">
+                        <label for="login-password" class="form-label">Password</label>
+                        <input 
+                            type="password" 
+                            id="login-password" 
+                            name="login-password"
+                            class="form-input" 
+                            placeholder="Enter your password"
+                            required
+                        >
+                    </div>
+                
+                    <div class="form-checkbox-group">
+                        <input type="checkbox" id="remember-me" class="form-checkbox">
+                        <label for="remember-me" class="form-checkbox-label">Remember me</label>
+                    </div>
+                
+                    <button type="submit" class="submit-button">Sign In</button>
+                
+                    <div class="divider">OR</div>
+                
+                    <button class="social-login" type="button">
+                        <i class="ri-google-fill"></i>
+                        Sign in with Google
+                    </button>
+                
+                    <div class="form-footer">
+                        <a href="#">Forgot your password?</a>
+                    </div>
+                </form>
+                
+                <!-- Signup Form -->
+                <form class="signup-form" method="POST" action="{{ url_for('signup') }}">
+                    <div class="form-header">
+                        <h2 class="form-title">Create an account</h2>
+                        <p class="form-subtitle">Sign up to start learning with StudiQ</p>
+                    </div>
+                
+                    <div class="form-control">
+                        <label class="form-label">I am a</label>
+                        <div class="role-selection">
+                            <div class="role-option selected" id="student-role-option">
+                                <div class="role-icon">
+                                    <i class="ri-user-3-line"></i>
+                                </div>
+                                <div class="role-label">Student</div>
+                                <input type="radio" name="student-role" value="student" checked style="display: none;">
+                            </div>
+                            <div class="role-option" id="teacher-role-option">
+                                <div class="role-icon">
+                                    <i class="ri-group-line"></i>
+                                </div>
+                                <div class="role-label">Teacher</div>
+                                <input type="radio" name="student-role" value="teacher" style="display: none;">
+                            </div>
+                        </div>
+                    </div>
+                
+                    <div class="form-control">
+                        <label for="signup-name" class="form-label">Full Name</label>
+                        <input 
+                            type="text" 
+                            id="signup-name" 
+                            name="signup-name" 
+                            class="form-input" 
+                            placeholder="Enter your full name"
+                            required
+                        >
+                    </div>
+                
+                    <div class="form-control">
+                        <label for="signup-email" class="form-label">Email</label>
+                        <input 
+                            type="email" 
+                            id="signup-email" 
+                            name="signup-email" 
+                            class="form-input" 
+                            placeholder="Enter your email"
+                            required
+                        >
+                    </div>
+                
+                    <div class="form-control">
+                        <label for="signup-password" class="form-label">Password</label>
+                        <input 
+                            type="password" 
+                            id="signup-password" 
+                            name="signup-password" 
+                            class="form-input" 
+                            placeholder="Create a password"
+                            required
+                        >
+                    </div>
+                
+                    <div class="form-checkbox-group">
+                        <input type="checkbox" id="terms" name="terms" class="form-checkbox" required>
+                        <label for="terms" class="form-checkbox-label">
+                            I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                        </label>
+                    </div>
+                
+                    <!-- Create Account Button -->
+                    <button type="submit" class="submit-button">
+                        Create Account
+                    </button>
+                
+                    <div class="divider">OR</div>
+                
+                    <button class="social-login" type="button">
+                        <i class="ri-google-fill"></i>
+                        Sign up with Google
+                    </button>
+                </form>
+            </div>
+        </section>
+    </div>
+    
+    <script>
+        // Toggle between login and signup forms
+        const loginToggle = document.getElementById('login-toggle');
+        const signupToggle = document.getElementById('signup-toggle');
+        const loginForm = document.querySelector('.login-form');
+        const signupForm = document.querySelector('.signup-form');
+        
+        loginToggle.addEventListener('click', () => {
+            loginToggle.classList.add('active');
+            signupToggle.classList.remove('active');
+            loginForm.classList.add('active');
+            signupForm.classList.remove('active');
+        });
+        
+        signupToggle.addEventListener('click', () => {
+            signupToggle.classList.add('active');
+            loginToggle.classList.remove('active');
+            signupForm.classList.add('active');
+            loginForm.classList.remove('active');
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Flash message auto-dismiss
+            const flashMessages = document.querySelectorAll('.flash-message');
+            flashMessages.forEach(message => {
+                setTimeout(() => {
+                    message.style.opacity = '0';
+                    setTimeout(() => message.remove(), 300);
+                }, 5000);
+            });
+
+            // Flash message close button
+            document.querySelectorAll('.flash-close').forEach(button => {
+                button.addEventListener('click', function() {
+                    this.parentElement.style.opacity = '0';
+                    setTimeout(() => this.parentElement.remove(), 300);
+                });
+            });
+
+            // Form validation
+            const signupForm = document.querySelector('.signup-form');
+            const loginForm = document.querySelector('.login-form');
+
+            function validateEmail(email) {
+                const re = /^[\w\.-]+@[\w\.-]+\.\w+$/;
+                return re.test(email);
+            }
+
+            function showError(input, message) {
+                input.classList.add('error');
+                // Remove any existing error messages
+                const existingError = input.parentNode.querySelector('.error-message');
+                if (existingError) {
+                    existingError.remove();
+                }
+                
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'error-message';
+                errorDiv.textContent = message;
+                input.parentNode.appendChild(errorDiv);
+            }
+
+            function clearErrors(form) {
+                form.querySelectorAll('.error').forEach(input => {
+                    input.classList.remove('error');
+                });
+                form.querySelectorAll('.error-message').forEach(message => {
+                    message.remove();
+                });
+            }
+
+            signupForm.addEventListener('submit', function(e) {
+                clearErrors(this);
+                let hasError = false;
+
+                const name = this.querySelector('#signup-name');
+                const email = this.querySelector('#signup-email');
+                const password = this.querySelector('#signup-password');
+                const terms = this.querySelector('#terms');
+
+                if (!name.value.trim()) {
+                    showError(name, 'Full name is required');
+                    hasError = true;
+                }
+
+                if (!email.value.trim()) {
+                    showError(email, 'Email is required');
+                    hasError = true;
+                } else if (!validateEmail(email.value)) {
+                    showError(email, 'Please enter a valid email address');
+                    hasError = true;
+                }
+
+                if (!password.value) {
+                    showError(password, 'Password is required');
+                    hasError = true;
+                } else if (password.value.length < 6) {
+                    showError(password, 'Password must be at least 6 characters long');
+                    hasError = true;
+                }
+                
+                if (!terms.checked) {
+                    showError(terms, 'You must agree to the Terms of Service and Privacy Policy');
+                    hasError = true;
+                }
+
+                if (hasError) {
+                    e.preventDefault();
+                }
+            });
+
+            loginForm.addEventListener('submit', function(e) {
+                clearErrors(this);
+                let hasError = false;
+
+                const email = this.querySelector('#login-email');
+                const password = this.querySelector('#login-password');
+
+                if (!email.value.trim()) {
+                    showError(email, 'Email is required');
+                    hasError = true;
+                } else if (!validateEmail(email.value)) {
+                    showError(email, 'Please enter a valid email address');
+                    hasError = true;
+                }
+
+                if (!password.value) {
+                    showError(password, 'Password is required');
+                    hasError = true;
+                }
+
+                if (hasError) {
+                    e.preventDefault();
+                }
+            });
+
+            // Role selection handling
+            const roleOptions = document.querySelectorAll('.role-option');
+            roleOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove selected class from all options
+                    roleOptions.forEach(opt => opt.classList.remove('selected'));
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+                    // Check the radio input
+                    this.querySelector('input[type="radio"]').checked = true;
+                });
+            });
+        });
+    </script>
+</body>
+</html>

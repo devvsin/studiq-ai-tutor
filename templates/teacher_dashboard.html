@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudiQ - Teacher Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .dashboard-container {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .welcome-banner {
+            background: linear-gradient(135deg, #0b0033 0%, #1a0040 50%, #240054 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .welcome-banner h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .teacher-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .teacher-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            text-decoration: none;
+            color: var(--color-text-dark);
+        }
+        
+        .teacher-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background-color: var(--color-primary-lightest);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-primary);
+            font-size: 24px;
+        }
+        
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .card-description {
+            color: var(--color-text-medium);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .recent-activity {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .activity-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--color-text-dark);
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+        
+        .activity-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--color-border-light);
+        }
+        
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--color-primary-lightest);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-primary);
+            font-size: 20px;
+        }
+        
+        .activity-content {
+            flex: 1;
+        }
+        
+        .activity-text {
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .activity-time {
+            font-size: 0.8rem;
+            color: var(--color-text-light);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: var(--color-text-light);
+        }
+        
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--color-primary-light);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="left-header">
+                <button class="mobile-menu-btn" id="mobile-menu-btn">
+                    <i class="ri-menu-line"></i>
+                </button>
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="ri-flashlight-line"></i>
+                    </div>
+                    <a href="{{ url_for('home') }}" style="text-decoration: none; color: inherit;">
+                        <div class="logo-text">StudiQ</div>
+                    </a>
+                </div>
+                <nav>
+                    <a href="{{ url_for('home') }}">Home</a>
+                    <a href="{{ url_for('teacher_dashboard') }}" class="active">Teacher Dashboard</a>
+                </nav>
+            </div>
+            <div class="login-icon">
+                {% if session.user_name %}
+                <div class="user-menu">
+                    <span class="user-name">{{ session.user_name }}</span>
+                    <a href="{{ url_for('logout') }}" style="color: inherit; text-decoration: none;" title="Logout">
+                        <i class="ri-logout-box-line"></i>
+                    </a>
+                </div>
+                {% else %}
+                <a href="{{ url_for('loginpage') }}" style="color: inherit; text-decoration: none;" title="Login">
+                    <i class="ri-user-3-line"></i>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <div class="dashboard-container">
+        <!-- Welcome Banner -->
+        <div class="welcome-banner">
+            <h1>Welcome, {{ session.user_name }}</h1>
+            <p>Manage your teaching activities and resources from this dashboard.</p>
+        </div>
+        
+        <!-- Teacher Tools Cards -->
+        <div class="teacher-cards">
+            <a href="{{ url_for('app_dashboard') }}" class="teacher-card">
+                <div class="card-icon">
+                    <i class="ri-message-3-line"></i>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">AI Tutor Chat</h3>
+                    <p class="card-description">Use StudiQ AI to help with teaching content and lesson planning.</p>
+                </div>
+            </a>
+            
+            <a href="{{ url_for('create_quiz') }}" class="teacher-card">
+                <div class="card-icon">
+                    <i class="ri-question-line"></i>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Create Quiz</h3>
+                    <p class="card-description">Create assessments and quizzes for your students.</p>
+                </div>
+            </a>
+            
+            <a href="{{ url_for('student_submissions') }}" class="teacher-card">
+                <div class="card-icon">
+                    <i class="ri-file-list-3-line"></i>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Student Submissions</h3>
+                    <p class="card-description">View and evaluate student quiz submissions.</p>
+                </div>
+            </a>
+            
+            <a href="{{ url_for('create_syllabus') }}" class="teacher-card">
+                <div class="card-icon">
+                    <i class="ri-book-open-line"></i>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Create Syllabus</h3>
+                    <p class="card-description">Plan your course structure and lessons.</p>
+                </div>
+            </a>
+        </div>
+        
+        <!-- Recent Activity -->
+        <div class="recent-activity">
+            <h2 class="activity-title">Recent Activity</h2>
+            
+            <div class="empty-state">
+                <div class="empty-state-icon">
+                    <i class="ri-calendar-line"></i>
+                </div>
+                <p>No recent activity to display yet.</p>
+                <p>Start creating quizzes and syllabi to see your activity here!</p>
+            </div>
+            
+            <!-- Activity items will be dynamically added here in the future -->
+        </div>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
