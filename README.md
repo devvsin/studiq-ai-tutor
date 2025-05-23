@@ -289,8 +289,8 @@ This project was collaboratively developed by a dedicated team of 5 members, com
   <p><strong>Team Lead:</strong> <a href="https://github.com/devvsin">Devvrat</a></p>
   <p><strong>Team Member:</strong> <a href="https://github.com/Devasurya05">Devasurya</a></p>
   <p><strong>Team Member:</strong> <a href="https://github.com/NAKSHATHRA305">Nakshathra</a></p>
-  <p><strong>Team Member:</strong> <a href="https://github.com/devvsin">Neeha</a></p>
-  <p><strong>Team Member:</strong> <a href="https://github.com/devvsin">Ninmisha</a></p>
+  <p><strong>Team Member:</strong> <a href="https://github.com/neeha-praveen">Neeha</a></p>
+  <p><strong>Team Member:</strong> <a href="https://github.com/Ninmisha">Ninmisha</a></p>
   
   <br/>
   
