@@ -7,11 +7,11 @@ StudiQ - AI-Powered Personalized Learning Platform
   <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License">
   <img src="https://img.shields.io/badge/Team-5_Members-purple.svg" alt="Team Size">
 </div>
-🎯 Overview
+<p>🎯 Overview</p>
 StudiQ is an innovative AI-powered educational platform developed by our team that revolutionizes learning by adapting to individual learning styles. Using advanced machine learning and natural language processing, our platform provides personalized tutoring experiences that cater to visual, auditory, kinesthetic, and reading/writing learners.
 
-✨ Key Features
-🤖 AI-Powered Personalization
+<p>✨ Key Features</p>
+<p>🤖 AI-Powered Personalization</p>
 
 Adaptive Learning: Our AI analyzes learning patterns and adapts content delivery
 Google Gemini Integration: Advanced conversational AI for intelligent tutoring
